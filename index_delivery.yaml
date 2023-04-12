@@ -4,7 +4,7 @@ info:
   title: 'Arch Lab API'
   description: API для первого домашнего задания по курсу Архитектура программных систем
 servers:
-  - url: http://localhost:8083
+  - url: http://localhost:8082
     description: Delivery server
 paths:
   /search_login_in:
