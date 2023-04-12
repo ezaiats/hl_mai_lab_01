@@ -1,0 +1,135 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Arch Lab API'
+  description: API для первого домашнего задания по курсу Архитектура программных систем
+servers:
+  - url: http://localhost:8082
+    description: Post server
+paths:
+  /user_posts:
+    get:
+      summary: Чтение информации о посылках пользователя
+      parameters:
+      - name: login_in
+        description: Уникальный логин пользователя
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Список посылок пользователя найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/post'
+        404:
+          description: Список посылок пользователя не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Добавление новой посылки
+      parameters:
+      - name: login_in
+        description: Логин отправителя
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: login_out
+        description: Логин получателя
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: address_in
+        description: Адрес отправителя
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: address_out
+        description: Адрес получателя
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: weight
+        description: Вес посылки
+        in: query
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Трек-номер посылки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/track_number'
+        404:
+          description: Ошибка создания посылки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    track_number:
+      description: Уникальный трек-номер посылки
+      type: string
+    post:
+      type: object
+      required:
+        - id
+        - login_in
+        - login_out
+        - address_in
+        - address_out
+        - weight
+        - track_number
+      properties:
+        id:
+          type: integer
+        login_in:
+          type: string
+        login_out:
+          type: string
+        address_in:
+          type: string
+        address_out:
+          type: string
+        weight:
+          type: number
+        track_number:
+          $ref: '#/components/schemas/track_number'
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: Сообщение об ошибке
+          type: string
+  securitySchemes:
+      basicAuth:     
+        type: http
+        scheme: basic
+security:
+  - basicAuth: []

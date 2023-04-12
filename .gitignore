@@ -1,0 +1,6 @@
+CMakeFiles/*
+.vscode/*
+build/*
+tests.cpp/*
+commands.sql
+

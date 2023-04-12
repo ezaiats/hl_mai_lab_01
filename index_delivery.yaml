@@ -1,0 +1,180 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Arch Lab API'
+  description: API для первого домашнего задания по курсу Архитектура программных систем
+servers:
+  - url: http://localhost:8083
+    description: Delivery server
+paths:
+  /search_login_in:
+    get:
+      summary: Поиск доставок по отправителю
+      parameters:
+      - name: login_in
+        description: Логин отправителя
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Доставки по отправителю
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deliveries'
+        404:
+          description: Доставки по отправителю не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /search_login_out:
+    get:
+      summary: Поиск доставок по получателю
+      parameters:
+      - name: login_out
+        description: Логин получателя
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Доставки по получателю
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deliveries'
+        404:
+          description: Доставки по получателю не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /change_status:
+    post:
+      summary: Изменение статуса доставки
+      parameters:
+      - name: track_number
+        description: Трек-номер посылки
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: status
+        description: Новый статус доставки
+        in: query
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Статус доставки изменен
+          
+        404:
+          description: Статус доставки не изменен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /create_new_delivery:
+    post:
+      summary: Добавление новой доставки
+      parameters:
+      - name: track_number
+        description: Трек-номер посылки
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: carrier
+        description: Перевозчик
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Доставка добавлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/delivery_id'
+        404:
+          description: Доставка не добавлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Неожиданная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    delivery_id:
+      description: Уникальный идентификатор доставки
+      type: integer
+    deliveries:
+      type: array
+      items:
+        $ref: '#/components/schemas/delivery'
+    delivery:
+      type: object
+      required:
+        - id
+        - track_number
+        - carrier
+        - status
+        - time
+      properties:
+        id:
+          $ref: '#/components/schemas/delivery_id'
+        track_number:
+          type: string
+        carrier:
+          type: string
+        status:
+          type: integer
+        time:
+          type: string
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: Сообщение о ошибке
+          type: string
+  securitySchemes:
+      basicAuth:     
+        type: http
+        scheme: basic
+security:
+  - basicAuth: []
