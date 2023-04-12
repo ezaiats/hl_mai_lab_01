@@ -49,7 +49,7 @@ services:
   post_server:
     build:
       context: post_server
-      dockerfile: Dockerfile
+      dockerfile: post_server/Dockerfile
     container_name: post_server
     environment:
       - DB_HOST=mai-db-node-ex01
@@ -62,11 +62,14 @@ services:
       - 8083:8083
     networks:
       - arch-network
+    depends_on:
+      mai-db-node-ex01:
+        condition: service_healthy
 
   delivery_server:
     build:
       context: delivery_server
-      dockerfile: Dockerfile
+      dockerfile: delivery_server/Dockerfile
     container_name: delivery_server
     environment:
       - DB_HOST=mai-db-node-ex01
@@ -79,18 +82,21 @@ services:
       - 8082:8082
     networks:
       - arch-network
+    depends_on:
+      mai-db-node-ex01:
+        condition: service_healthy
 
-  other_server:
-    build:
-      context: other_server
-      dockerfile: Dockerfile
-    container_name: other_server
-    environment:
-      - SERVICE_HOST=my_service
-    ports:
-      - 8081:8081
-    networks:
-      - arch-network
+  # other_server:
+  #   build:
+  #     context: other_server
+  #     dockerfile: Dockerfile
+  #   container_name: other_server
+  #   environment:
+  #     - SERVICE_HOST=my_service
+  #   ports:
+  #     - 8081:8081
+  #   networks:
+  #     - arch-network
 
 volumes:
   db-node-ex01-data:
