@@ -59,7 +59,7 @@ services:
       - DB_DATABASE=archdb
       - SERVICE_HOST=my_service
     ports:
-      - 8082:8082
+      - 8083:8083
     networks:
       - arch-network
 
