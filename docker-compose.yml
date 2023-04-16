@@ -49,7 +49,7 @@ services:
   post_server:
     build:
       context: post_server
-      dockerfile: Dockerfile
+      dockerfile: post_server/Dockerfile
     container_name: post_server
     environment:
       - DB_HOST=mai-db-node-ex01
@@ -69,7 +69,7 @@ services:
   delivery_server:
     build:
       context: delivery_server
-      dockerfile: Dockerfile
+      dockerfile: delivery_server/Dockerfile
     container_name: delivery_server
     environment:
       - DB_HOST=mai-db-node-ex01
