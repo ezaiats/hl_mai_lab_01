@@ -86,17 +86,17 @@ services:
       mai-db-node-ex01:
         condition: service_healthy
 
-  # other_server:
-  #   build:
-  #     context: other_server
-  #     dockerfile: Dockerfile
-  #   container_name: other_server
-  #   environment:
-  #     - SERVICE_HOST=my_service
-  #   ports:
-  #     - 8081:8081
-  #   networks:
-  #     - arch-network
+  other_server:
+    build:
+      context: other_server
+      dockerfile: Dockerfile
+    container_name: other_server
+    environment:
+      - SERVICE_HOST=my_service
+    ports:
+      - 8081:8081
+    networks:
+      - arch-network
 
 volumes:
   db-node-ex01-data:
