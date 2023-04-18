@@ -60,6 +60,8 @@ services:
       - SERVICE_HOST=my_service
     ports:
       - 8083:8083
+    links:
+      - "mai-db-node-ex01"
     networks:
       - arch-network
     depends_on:
