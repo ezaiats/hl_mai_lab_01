@@ -67,10 +67,12 @@ protected:
     {
         if (!_helpRequested)
         {
+
             database::Post::init();
             ServerSocket svs(Poco::Net::SocketAddress("0.0.0.0", 8083));
             HTTPServer srv(new HTTPRequestFactory(DateTimeFormat::SORTABLE_FORMAT), svs, new HTTPServerParams);
             srv.start();
+            std::cout << "Post service started at 8083" << std::endl;
             waitForTerminationRequest();
             srv.stop();
         }
