@@ -3,8 +3,8 @@ version: '2.1'
 services:
   mai-db-node-ex01:
     build:
-      context: mariadb
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: mariadb/Dockerfile
     container_name: mai-db-node-ex01
     restart: unless-stopped
     environment:
