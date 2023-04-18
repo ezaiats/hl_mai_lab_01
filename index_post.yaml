@@ -23,7 +23,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/post'
+                $ref: '#/components/schemas/posts'
         404:
           description: Список посылок пользователя не найден
           content:
@@ -94,6 +94,10 @@ components:
     track_number:
       description: Уникальный трек-номер посылки
       type: string
+    posts:
+      type: array
+      items:
+        $ref: '#/components/schemas/post'
     post:
       type: object
       required:
