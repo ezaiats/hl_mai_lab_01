@@ -1,4 +1,4 @@
-version: '3.8'
+version: '2.1'
 
 services:
   mai-db-node-ex01:
@@ -29,8 +29,8 @@ services:
 
   my_service:
     build:
-      context: my_service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: my_service/Dockerfile
     container_name: my_service
     environment:
       - DB_HOST=mai-db-node-ex01
@@ -48,8 +48,8 @@ services:
 
   post_server:
     build:
-      context: post_server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: post_server/Dockerfile
     container_name: post_server
     environment:
       - DB_HOST=mai-db-node-ex01
@@ -60,8 +60,6 @@ services:
       - SERVICE_HOST=my_service
     ports:
       - 8083:8083
-    links:
-      - "mai-db-node-ex01"
     networks:
       - arch-network
     depends_on:
@@ -70,8 +68,8 @@ services:
 
   delivery_server:
     build:
-      context: delivery_server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: delivery_server/Dockerfile
     container_name: delivery_server
     environment:
       - DB_HOST=mai-db-node-ex01
@@ -90,8 +88,8 @@ services:
 
   other_server:
     build:
-      context: other_server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: other_server/Dockerfile
     container_name: other_server
     environment:
       - SERVICE_HOST=my_service
