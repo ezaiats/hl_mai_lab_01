@@ -3,8 +3,8 @@ version: '2.1'
 services:
   mai-db-node-ex01:
     build:
-      context: .
-      dockerfile: mariadb/Dockerfile
+      context: mariadb
+      dockerfile: Dockerfile
     container_name: mai-db-node-ex01
     restart: unless-stopped
     environment:
@@ -29,8 +29,8 @@ services:
 
   my_service:
     build:
-      context: .
-      dockerfile: my_service/Dockerfile
+      context: my_service
+      dockerfile: Dockerfile
     container_name: my_service
     environment:
       - DB_HOST=mai-db-node-ex01
@@ -48,8 +48,8 @@ services:
 
   post_server:
     build:
-      context: .
-      dockerfile: post_server/Dockerfile
+      context: post_server
+      dockerfile: Dockerfile
     container_name: post_server
     environment:
       - DB_HOST=mai-db-node-ex01
@@ -68,8 +68,8 @@ services:
 
   delivery_server:
     build:
-      context: .
-      dockerfile: delivery_server/Dockerfile
+      context: delivery_server
+      dockerfile: Dockerfile
     container_name: delivery_server
     environment:
       - DB_HOST=mai-db-node-ex01
@@ -88,8 +88,8 @@ services:
 
   other_server:
     build:
-      context: .
-      dockerfile: other_server/Dockerfile
+      context: other_server
+      dockerfile: Dockerfile
     container_name: other_server
     environment:
       - SERVICE_HOST=my_service
