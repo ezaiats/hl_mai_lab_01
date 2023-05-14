@@ -1,11 +1,11 @@
 version: '2.1'
 
 services:
-  mai-db-node-ex01:
+  db-node-1:
     build:
-      context: mariadb
+      context: mysql
       dockerfile: Dockerfile
-    container_name: mai-db-node-ex01
+    container_name: db-node-1
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: archdb
@@ -19,13 +19,79 @@ services:
     networks:
       - arch-network
     ports:
-      - 3360:3306
+      - 3361:3306
+    volumes:
+      - db-node-1-data:/var/lib/mysql
+
+  db-node-2:
+    build:
+      context: mysql
+      dockerfile: Dockerfile
+    container_name: db-node-2
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: archdb
+      MYSQL_USER: stud
+      MYSQL_PASSWORD: stud
+      MYSQL_ROOT_PASSWORD: '1'
+    command: >
+      --sql-mode='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'
+      --general-log=ON
+      --log-queries-not-using-indexes=ON
+    networks:
+      - arch-network
+    ports:
+      - 3362:3306
+    volumes:
+      - db-node-2-data:/var/lib/mysql
+
+  db-node-3:
+    build:
+      context: mysql
+      dockerfile: Dockerfile
+    container_name: db-node-3
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: archdb
+      MYSQL_USER: stud
+      MYSQL_PASSWORD: stud
+      MYSQL_ROOT_PASSWORD: '1'
+    command: >
+      --sql-mode='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'
+      --general-log=ON
+      --log-queries-not-using-indexes=ON
+    networks:
+      - arch-network
+    ports:
+      - 3363:3306
+    volumes:
+      - db-node-3-data:/var/lib/mysql
+
+  proxysql:
+    build:
+      context: proxysql
+      dockerfile: Dockerfile
+    container_name: proxysql
+    command: >
+      --initial
+    volumes:
+      - proxysql-data:/var/lib/proxysql
     healthcheck:
       test: "/usr/bin/mysql --user=stud --password=stud --execute \"SHOW DATABASES;\""
       timeout: 20s
       retries: 5
-    volumes:
-      - db-node-ex01-data:/var/lib/mysql
+    depends_on:
+      - db-node-1
+      - db-node-2
+      - db-node-3
+      
+    networks:
+      - arch-network
+    ports:
+      # Mysql Client Port
+      - "6033:6033"
+      # Mysql Admin Port
+      - "6032:6032"
 
   my_service:
     build:
@@ -43,8 +109,10 @@ services:
     networks:
       - arch-network
     depends_on:
-      mai-db-node-ex01:
-        condition: service_healthy
+      - proxysql
+      - db-node-1
+      - db-node-2
+      - db-node-3
 
   post_server:
     build:
@@ -63,8 +131,10 @@ services:
     networks:
       - arch-network
     depends_on:
-      mai-db-node-ex01:
-        condition: service_healthy
+      - proxysql
+      - db-node-1
+      - db-node-2
+      - db-node-3
 
   delivery_server:
     build:
@@ -83,8 +153,10 @@ services:
     networks:
       - arch-network
     depends_on:
-      mai-db-node-ex01:
-        condition: service_healthy
+      - proxysql
+      - db-node-1
+      - db-node-2
+      - db-node-3
 
   other_server:
     build:
@@ -100,6 +172,10 @@ services:
 
 volumes:
   db-node-ex01-data:
+  db-node-1-data:
+  db-node-2-data:
+  db-node-3-data:
+  proxysql-data:
 
 networks:
   arch-network:
