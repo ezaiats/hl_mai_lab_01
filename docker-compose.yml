@@ -84,7 +84,6 @@ services:
       - db-node-1
       - db-node-2
       - db-node-3
-      
     networks:
       - arch-network
     ports:
@@ -110,9 +109,6 @@ services:
       - arch-network
     depends_on:
       - proxysql
-      - db-node-1
-      - db-node-2
-      - db-node-3
 
   post_server:
     build:
@@ -132,9 +128,6 @@ services:
       - arch-network
     depends_on:
       - proxysql
-      - db-node-1
-      - db-node-2
-      - db-node-3
 
   delivery_server:
     build:
@@ -154,9 +147,6 @@ services:
       - arch-network
     depends_on:
       - proxysql
-      - db-node-1
-      - db-node-2
-      - db-node-3
 
   other_server:
     build:
