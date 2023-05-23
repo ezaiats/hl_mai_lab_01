@@ -193,7 +193,7 @@ services:
     container_name: my_service
     environment:
       - DB_HOST=proxysql
-      - DB_PORT=3306
+      - DB_PORT=6033
       - DB_LOGIN=stud
       - DB_PASSWORD=stud
       - DB_DATABASE=archdb
@@ -211,7 +211,7 @@ services:
     container_name: post_server
     environment:
       - DB_HOST=proxysql
-      - DB_PORT=3306
+      - DB_PORT=6033
       - DB_LOGIN=stud
       - DB_PASSWORD=stud
       - DB_DATABASE=archdb
@@ -230,7 +230,7 @@ services:
     container_name: delivery_server
     environment:
       - DB_HOST=proxysql
-      - DB_PORT=3306
+      - DB_PORT=6033
       - DB_LOGIN=stud
       - DB_PASSWORD=stud
       - DB_DATABASE=archdb
