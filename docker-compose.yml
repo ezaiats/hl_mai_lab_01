@@ -1,3 +1,97 @@
+# version: '2.1'
+
+# services:
+#   mai-db-node-ex01:
+#     build:
+#       context: mysql
+#       dockerfile: Dockerfile
+#     container_name: mai-db-node-ex01
+#     restart: unless-stopped
+#     environment:
+#       MYSQL_DATABASE: archdb
+#       MYSQL_USER: stud
+#       MYSQL_PASSWORD: stud
+#       MYSQL_ROOT_PASSWORD: '1'
+#     command: >
+#       --sql-mode='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'
+#       --general-log=ON
+#       --log-queries-not-using-indexes=ON
+#     networks:
+#       - arch-network
+#     ports:
+#       - 3360:3306
+#     healthcheck:
+#       test: "/usr/bin/mysql --user=stud --password=stud --execute \"SHOW DATABASES;\""
+#       timeout: 20s
+#       retries: 5
+#     volumes:
+#       - db-node-ex01-data:/var/lib/mysql
+
+#   my_service:
+#     build:
+#       context: my_service
+#       dockerfile: Dockerfile
+#     container_name: my_service
+#     environment:
+#       - DB_HOST=mai-db-node-ex01
+#       - DB_PORT=3306
+#       - DB_LOGIN=stud
+#       - DB_PASSWORD=stud
+#       - DB_DATABASE=archdb
+#     ports:
+#       - 8080:8080
+#     networks:
+#       - arch-network
+#     depends_on:
+#       mai-db-node-ex01:
+#         condition: service_healthy
+#   post_server:
+#     build:
+#       context: post_server
+#       dockerfile: Dockerfile
+#     container_name: post_server
+#     environment:
+#       - DB_HOST=mai-db-node-ex01
+#       - DB_PORT=3306
+#       - DB_LOGIN=stud
+#       - DB_PASSWORD=stud
+#       - DB_DATABASE=archdb
+#       - SERVICE_HOST=my_service
+#     ports:
+#       - 8083:8083
+#     networks:
+#       - arch-network
+#     depends_on:
+#       mai-db-node-ex01:
+#         condition: service_healthy
+#   delivery_server:
+#     build:
+#       context: delivery_server
+#       dockerfile: Dockerfile
+#     container_name: delivery_server
+#     environment:
+#       - DB_HOST=mai-db-node-ex01
+#       - DB_PORT=3306
+#       - DB_LOGIN=stud
+#       - DB_PASSWORD=stud
+#       - DB_DATABASE=archdb
+#       - SERVICE_HOST=my_service
+#     ports:
+#       - 8082:8082
+#     networks:
+#       - arch-network
+#     depends_on:
+#       mai-db-node-ex01:
+#         condition: service_healthy
+# volumes:
+#   db-node-ex01-data:
+
+# networks:
+#   arch-network:
+#     driver: "bridge"
+#     external: false
+
+
 version: '2.1'
 
 services:
