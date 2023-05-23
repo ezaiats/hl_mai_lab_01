@@ -203,9 +203,6 @@ services:
       - arch-network
     depends_on:
       - proxysql
-      - db-node-1
-      - db-node-2
-      - db-node-3
 
   post_server:
     build:
