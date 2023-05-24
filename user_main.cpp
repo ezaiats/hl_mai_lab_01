@@ -2,6 +2,7 @@
 
 int main(int argc, char*argv[]) 
 {
+    std::cout << "Hello!!\n";
     HTTPWebServer app;
     return app.run(argc, argv);
 }

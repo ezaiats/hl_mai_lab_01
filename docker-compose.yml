@@ -92,23 +92,26 @@ services:
       # Mysql Admin Port
       - "6032:6032"
 
-  my_service:
-    build:
-      context: my_service
-      dockerfile: Dockerfile
-    container_name: my_service
-    environment:
-      - DB_HOST=proxysql
-      - DB_PORT=6033
-      - DB_LOGIN=stud
-      - DB_PASSWORD=stud
-      - DB_DATABASE=archdb
-    ports:
-      - 8080:8080
-    networks:
-      - arch-network
-    depends_on:
-      - proxysql
+  # my_service:
+  #   build:
+  #     context: my_service
+  #     dockerfile: Dockerfile
+  #   container_name: my_service
+  #   environment:
+  #     - DB_HOST=proxysql
+  #     - DB_PORT=6033
+  #     - DB_LOGIN=stud
+  #     - DB_PASSWORD=stud
+  #     - DB_DATABASE=archdb
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - arch-network
+  #   depends_on:
+  #     - proxysql
+  #     - db-node-1
+  #     - db-node-2
+  #     - db-node-3
 
   post_server:
     build:
