@@ -92,11 +92,11 @@ services:
       # Mysql Admin Port
       - "6032:6032"
 
-  user_server:
+  my_service:
     build:
-      context: user_server
+      context: my_service
       dockerfile: Dockerfile
-    container_name: user_server
+    container_name: my_service
     environment:
       - DB_HOST=proxysql
       - DB_PORT=6033
@@ -121,6 +121,7 @@ services:
       - DB_LOGIN=stud
       - DB_PASSWORD=stud
       - DB_DATABASE=archdb
+      - SERVICE_HOST=my_service
     ports:
       - 8083:8083
     networks:
@@ -139,6 +140,7 @@ services:
       - DB_LOGIN=stud
       - DB_PASSWORD=stud
       - DB_DATABASE=archdb
+      - SERVICE_HOST=my_service
     ports:
       - 8082:8082
     networks:

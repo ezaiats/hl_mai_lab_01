@@ -93,53 +93,34 @@ namespace database
     {
         try
         {
-            // Poco::Data::Session session = database::Database::get().create_session();
-            // Poco::Data::Statement select(session);
-            // long id;
-            // select << "SELECT id FROM User where login=? and password=?",
-            //     into(id),
-            //     use(login),
-            //     use(password),
-            //     range(0, 1); //  iterate over result set one row at a time
-
-            // select.execute();
-            // Poco::Data::RecordSet rs(select);
-            // if (rs.moveFirst()) return id;
-
             std::vector<long> result;
             std::vector<std::string> hints = database::Database::get_all_hints();
-
             std::vector<std::future<std::vector<long>>> futures;
             for (const std::string &hint : hints)
             {
                 auto handle = std::async(std::launch::async, [login, password, hint]() mutable -> std::vector<long>
-                                        {
-                                            std::vector<long> result;
-
-                                            Poco::Data::Session session = database::Database::get().create_session();
-                                            Statement select(session);
-                                            std::string select_str = "SELECT my_id FROM User where login='";
-                                            select_str += login;
-                                            select_str += "' and password='";
-                                            select_str += password;
-                                            select_str += "'";
-                                            select_str += hint;
-                                            select << select_str;
-                                            std::cout << select_str << std::endl;
-                                            
-                                            select.execute();
-                                            Poco::Data::RecordSet record_set(select);
-
-                                            bool more = record_set.moveFirst();
-                                            while (more)
-                                            {
-                                                long a;
-                                                a = record_set[0].convert<long>();
-                                                result.push_back(a);
-                                                more = record_set.moveNext();
-                                            }
-                                            return result; });
-
+                {
+                    std::vector<long> result;
+                    Poco::Data::Session session = database::Database::get().create_session();
+                    Statement select(session);
+                    std::string select_str = "SELECT my_id FROM User where login='";
+                    select_str += login;
+                    select_str += "' and password='";
+                    select_str += password;
+                    select_str += "'";
+                    select_str += hint;
+                    select << select_str;
+                    std::cout << select_str << std::endl;
+                    select.execute();
+                    Poco::Data::RecordSet record_set(select);
+                    bool more = record_set.moveFirst();
+                    while (more){
+                        long a;
+                        a = record_set[0].convert<long>();
+                        result.push_back(a);
+                        more = record_set.moveNext();
+                    }
+                    return result; });
                 futures.emplace_back(std::move(handle));
             }
 
@@ -173,7 +154,7 @@ namespace database
             Poco::Data::Statement select(session);
             User a;
             std::string sharding_hint = database::Database::sharding_hint(id);
-            std::string select_str = "SELECT id, my_id, first_name, last_name, email, title,login,password FROM User where my_id=?";
+            std::string select_str = "SELECT id, my_id, first_name, last_name, email, title, login, password FROM User where my_id=?";
             select_str += sharding_hint;
             std::cout << select_str << std::endl;
             select << select_str,
@@ -249,39 +230,11 @@ namespace database
     {
         try
         {
-            // Poco::Data::Session session = database::Database::get().create_session();
-            // Statement select(session);
-            // std::vector<User> result;
-            // User a;
-            // first_name += "%";
-            // last_name += "%";
-            // select << "SELECT id, first_name, last_name, email, title, login, password FROM User where first_name LIKE ? and last_name LIKE ?",
-            //     into(a._id),
-            //     into(a._first_name),
-            //     into(a._last_name),
-            //     into(a._email),
-            //     into(a._title),
-            //     into(a._login),
-            //     into(a._password),
-            //     use(first_name),
-            //     use(last_name),
-            //     range(0, 1); //  iterate over result set one row at a time
-
-            // while (!select.done())
-            // {
-            //     if (select.execute())
-            //         result.push_back(a);
-            // }
-            // return result;
-
             std::vector<User> result;
-            // get all hints for shards
             std::vector<std::string> hints = database::Database::get_all_hints();
-
             std::vector<std::future<std::vector<User>>> futures;
             first_name + "%";
             last_name + "%";
-            // map phase in parallel
             for (const std::string &hint : hints)
             {
                 auto handle = std::async(std::launch::async, [first_name, last_name, hint]() mutable -> std::vector<User>
@@ -322,8 +275,8 @@ namespace database
             {
                 std::vector<User> v = res.get();
                 std::copy(std::begin(v),
-                std::end(v),
-                std::back_inserter(result));
+                          std::end(v),
+                          std::back_inserter(result));
             }
 
             return result;
