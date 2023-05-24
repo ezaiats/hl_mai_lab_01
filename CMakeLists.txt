@@ -78,11 +78,3 @@ target_link_libraries(${DELIVERY_SERVICE} PRIVATE
                              "PocoDataMySQL"
                              "mysqlclient"
                              ZLIB::ZLIB)
-
-add_executable(load_data load_data.cpp)
-target_link_libraries(load_data PRIVATE 
-                            ${CMAKE_THREAD_LIBS_INIT} 
-                            ${Poco_LIBRARIES}
-                            "PocoData"
-                            "PocoDataMySQL"                      
-                            ZLIB::ZLIB)

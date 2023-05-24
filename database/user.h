@@ -49,9 +49,6 @@ namespace database
             void save_to_mysql();
             long get_len_database();
 
-            void save_to_cache();
-            static std::optional<User> read_from_cache_by_id(long my_id);
-
             Poco::JSON::Object::Ptr toJSON() const;
 
     };
