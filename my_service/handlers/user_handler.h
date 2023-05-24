@@ -131,10 +131,26 @@ public:
             if (form.has("id") && (request.getMethod() == Poco::Net::HTTPRequest::HTTP_GET))
             {
                 long id = atol(form.get("id").c_str());
+                bool no_cache = false;
+                if (form.has("no_cache")) no_cache = true;
+                if (!no_cache)
+                {
+                    std::optional<database::User> result = database::User::read_from_cache_by_id(id);
+                    if (result)
+                    {
+                        response.setStatus(Poco::Net::HTTPResponse::HTTP_OK);
+                        response.setChunkedTransferEncoding(true);
+                        response.setContentType("application/json");
+                        std::ostream &ostr = response.send();
+                        Poco::JSON::Stringifier::stringify(remove_password(result->toJSON()), ostr);
+                        return;
+                    }
+                }
 
                 std::optional<database::User> result = database::User::read_by_id(id);
                 if (result)
                 {
+                    if(!no_cache) result->save_to_cache();
                     response.setStatus(Poco::Net::HTTPResponse::HTTP_OK);
                     response.setChunkedTransferEncoding(true);
                     response.setContentType("application/json");
@@ -226,6 +242,8 @@ public:
                     bool check_result = true;
                     std::string message;
                     std::string reason;
+                    bool no_cache = false;
+                    if (form.has("no_cache")) no_cache = true;
 
                     if (!check_name(user.get_first_name(), reason))
                     {
@@ -256,6 +274,11 @@ public:
                         response.setContentType("application/json");
                         std::ostream &ostr = response.send();
                         ostr << user.get_id();
+                        if(!no_cache)
+                        {
+                            std::optional<database::User> result = database::User::read_by_id(user.id());
+                            result->save_to_cache();
+                        } 
                         return;
                     }
                     else

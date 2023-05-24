@@ -1,6 +1,7 @@
 #include "user.h"
 #include "database.h"
 #include "../config/config.h"
+#include "cache.h"
 
 #include <Poco/Data/MySQL/Connector.h>
 #include <Poco/Data/MySQL/MySQLException.h>
@@ -87,6 +88,32 @@ namespace database
         user.password() = object->getValue<std::string>("password");
 
         return user;
+    }
+
+    std::optional<User> User::read_from_cache_by_id(long my_id)
+    {
+
+        try
+        {
+            std::string result;
+            if (database::Cache::get().get(my_id, result))
+                return fromJSON(result);
+            else
+                return std::optional<User>();
+        }
+        catch (std::exception& err)
+        {
+           // std::cerr << "error:" << err.what() << std::endl;
+            return std::optional<User>();
+        }
+    }
+
+    void User::save_to_cache()
+    {
+        std::stringstream ss;
+        Poco::JSON::Stringifier::stringify(toJSON(), ss);
+        std::string message = ss.str();
+        database::Cache::get().put(_my_id, message);
     }
 
     std::optional<long> User::auth(std::string &login, std::string &password)
