@@ -14,7 +14,6 @@ class  Config{
 
     public:
         static Config& get();
-
         std::string& port();
         std::string& host();
         std::string& login();

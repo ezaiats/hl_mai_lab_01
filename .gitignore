@@ -1,8 +1,5 @@
 CMakeFiles/*
 .vscode/*
 build/*
-other_server/*
 tests.cpp/*
-commands.sql/*
-other_main.cpp/*
-other.yaml
+commands.sql

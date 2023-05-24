@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 
 project(hl_server C CXX)
 
-SET (USER_SERVICE "user_server")
+SET (USER_SERVICE "user_service")
 SET (POST_SERVICE "post_service")
 SET (DELIVERY_SERVICE "delivery_service")
 

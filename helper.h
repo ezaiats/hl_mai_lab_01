@@ -4,6 +4,8 @@
 #include <istream>
 #include <ostream>
 
+std::string host = "user_service";
+
 bool get_identity(const std::string identity, std::string &login, std::string &password)
 {
     std::istringstream istr(identity);
